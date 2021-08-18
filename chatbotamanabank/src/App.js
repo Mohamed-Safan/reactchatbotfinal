@@ -4,11 +4,8 @@ import SimpleForm from './components/SimpleForm';
 function App() {
   return (
     <div >
-
-
-      <SimpleForm />  
-    
-  </div>
+      <SimpleForm />
+    </div>
   );
 }
 
