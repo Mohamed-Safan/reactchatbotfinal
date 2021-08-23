@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 
 const theme = {
   background: '#98FF98',
@@ -17,10 +17,10 @@ const theme = {
 
 //------------------  button  ----------
 
-const config ={
-width:"380px",
-height:"600px",
-floating: true,
+const config = {
+  width: "380px",
+  height: "600px",
+  floating: true,
 }
 
 //----------  Summary page --------------
@@ -95,8 +95,8 @@ class SimpleForm extends Component {
           speechSynthesis={{ enable: true, lang: 'en' }}
           headerTitle="AMANA"
           recognitionEnable={true}
-   
-         steps={[
+
+          steps={[
             //Introduction message
             {
               id: 'select-lang',
@@ -116,7 +116,7 @@ class SimpleForm extends Component {
               trigger: 'select-lang-one',
               delay: 1300,
             },
-          
+
 
             // 1st Option
             {
@@ -147,7 +147,7 @@ class SimpleForm extends Component {
               trigger: 'start-question',
               delay: 1300,
             },
-            
+
             {
               id: 'start-question',
               message: "Shell we Start ?😃",
@@ -205,8 +205,6 @@ class SimpleForm extends Component {
               user: true,
               delay: 1300,
               trigger: "name-wish",
-
-
             },
 
             {
@@ -653,9 +651,9 @@ class SimpleForm extends Component {
               id: 'salary-user-answer-two',
               options: [
                 { value: 'less5', label: 'Less than 5%', trigger: "summary" },
-                { value: '5to10', label: '5-10 %',trigger: "summary"  },
-                { value: '10to15', label: '10-15 %', trigger: "summary"  },
-                { value: '15plus', label: 'more than 15%',trigger: "summary"  },
+                { value: '5to10', label: '5-10 %', trigger: "summary" },
+                { value: '10to15', label: '10-15 %', trigger: "summary" },
+                { value: '15plus', label: 'more than 15%', trigger: "summary" },
                 { value: 'annual', label: 'what is Annual salary increment rate? 🙄', trigger: "salary-inc" },
               ],
               delay: 1300,
@@ -666,15 +664,15 @@ class SimpleForm extends Component {
               id: "salary-inc",
               component: (
                 <div> Percentage of salary increase each year </div>
-              ), 
+              ),
               delay: 1300,
               trigger: "salary-user-answer-one"
 
             },
 
-           {
+            {
               id: "summary",
-              message:"Summary of your details 👇👇👇👇",
+              message: "Summary of your details 👇",
               trigger: "summary-end",
               delay: 1300,
             },
@@ -685,7 +683,7 @@ class SimpleForm extends Component {
               component: <Summary />,
               asMessage: true,
               delay: 1300,
-              end:true,
+              end: true,
 
             },
 
@@ -694,7 +692,7 @@ class SimpleForm extends Component {
             //////// ---------------   தமிழ்    ------------/////////////// 
 
 
-            
+
             {
               id: 'tamil-lang',
               message: "வணக்கம்😃, நான் ஆமானாவின் அசிஸ்டண்ட்.",
@@ -722,13 +720,163 @@ class SimpleForm extends Component {
             {
               id: 'option-first-tamil',
               options: [
-                { value: 'yestamil', label: 'ஆம், ஆரம்பிப்போம்' },
-                { value: 'notamil ', label: 'இல்லை, வேண்டாம் ' },
+                { value: 'yestamil', label: 'ஆம், ஆரம்பிப்போம்', trigger:"yes-resp-tamil" },
+                { value: 'notamil ', label: 'இல்லை, வேண்டாம் ', trigger: "no-resp-tamil" },
               ],
               delay: 1300,
             },
 
-         
+            // no response
+            {
+              id: 'no-resp-tamil',
+              message: 'மன்னிக்கவும், அடுத்த முறை சந்திப்போம்... ',
+              delay: 1300,
+              trigger: "no-resp-ans-one-tamil",
+            },
+
+            // start again
+
+            {
+              id: 'no-resp-ans-one-tamil',
+              options: [
+                { value: 'againtamil', label: 'மீண்டும் ஆரம்பிக்கவும் 😁', trigger: "tamil-language" },
+              ],
+              delay: 1300,
+            },
+
+            //yes response
+
+            {
+              id: "yes-resp-tamil",
+              message: 'நன்று',
+              delay: 1300,
+              trigger: 'afterone-tamil',
+            },
+
+            {
+              id: "afterone-tamil",
+              message: 'நான் உங்களை எவ்வாறு கூப்பிட வேண்டும்? 🙂',
+              delay: 1300,
+              trigger: "nametamil",
+            },
+            {
+              id: "nametamil",
+              user: true,
+              delay: 1300,
+              trigger: "name-wish-tamil",
+            },
+            {
+              id: "name-wish-tamil",
+              message: "ஆஹா, {previousValue} உங்களது பெயர் இனிமையாக உள்ளது  ",
+              trigger: 'question-two-tamil',
+              delay: 1300,
+            },
+            {
+              id: "question-two-tamil",
+              message: "எதிர்காலத்தை திட்டமிடும் செயலிக்கு உங்களை வரவேற்க்கிறோம்.",
+              delay: 1300,
+              trigger: "question-three-tamil",
+            },
+
+            {
+              id: "question-three-tamil",
+              message: "உங்களது எதிர்காலத்தை திட்டமிட நாங்கள் உங்களுக்கு உதவுகிறோம் ",
+              delay: 1300,
+              trigger: "question-four-tamil",
+            },
+
+            {
+              id: "question-four-tamil",
+              message: "சில கேள்விகளுக்கு தயாராக இருக்கிறீர்களா?😊",
+              delay: 1300,
+              trigger: "question-five-tamil",
+            },
+
+             // option two
+
+            // 1st Option
+            {
+              id: "question-five-tamil",
+              options: [
+                { value: 'getstarttamil', label: 'ஆரம்பியுங்கள்', trigger: 'future-question-tamil' },
+              ],
+              delay: 1300,
+            },
+            {
+              id: "future-question-tamil",
+              message: "நீங்கள் இன்று எவ்வாறு இருக்கிறீர்கள் 😀",
+              delay: 1300,
+              trigger: "answer-one-tamil",
+            },
+
+            {
+              id: 'answer-one-tamil',
+              options: [
+                { value: 'goodtamil', label: 'நன்றாக உள்ளேன்😋' },
+                { value: 'badtamil', label: 'நன்றாக இல்லை😑', trigger: 'bad-question-tamil' },
+
+              ],
+              delay: 1300,
+            },
+
+            {
+              id: "bad-question-tamil",
+              message: "ஓஹ், வருந்துகிரேன். உங்களுக்கு இது கஷ்டமான காலம் என்று நினைக்கிறேன்😀",
+              delay: 1300,
+              trigger: "user-resp-three-tamil",
+
+            },
+            {
+              id: "user-resp-three-tamil",
+              message: "நான் ஏதாவது செய்ய வேண்டுமா? 😀",
+              delay: 1300,
+              trigger: "answer-two-tamil",
+            },
+
+            {
+              id: "answer-two-tamil",
+              options: [
+                { value: 'yt', label: 'ஆம் , 😋', trigger:"qestion-yes-tamil"},
+                { value: 'nt', label: 'வேண்டாம்  🙂'},
+              ],
+
+              delay: 1300,
+
+            },
+
+            {
+              id: "qestion-yes-tamil",
+              options: [
+                { value: 'jokest' , label: 'காமடிகள் 😋',trigger: "jokes-ans-tamil" },
+                { value: 'not', label: 'வேண்டாம் ' },
+              ],
+              delay: 1300,
+
+            },
+
+
+            {
+              id: 'jokes-ans-tamil',
+              component: (
+                <div>DOCTOR:- Do exercise daily for good health🙄</div>
+              ),
+              delay: 1300,
+             trigger: 'jokes-ans-two-tamil',
+            },
+
+
+            {
+              id: 'jokes-ans-two-tamil',
+              component: (
+                <div>PATIENT:- Sir I play tennis, football and cricket daily..</div>
+              ),
+              delay: 2800,
+              // trigger: 'jokes-ans-three-tamil',
+            },
+
+
+
+
 
 
 
