@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
+import Chart from "react-google-charts";
 
 const theme = {
   background: '#98FF98',
@@ -14,6 +15,42 @@ const theme = {
   userBubbleColor: '#73A16C',
   userFontColor: 'black',
 };
+
+
+class Graphs extends Component{
+  render(){
+    return (
+  
+
+  <Chart
+  width={'242px'}
+  height={'208px'}
+  chartType="AreaChart"
+  loader={<div>Loading Chart</div>}
+  data={[
+    ['Year', 'Sales', 'Expenses'],
+    ['2013', 1000, 400],
+    ['2014', 1170, 460],
+    ['2015', 660, 1120],
+    ['2016', 1030, 540],
+  ]}
+  options={{
+    title: 'graph name > sample',
+    hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
+    vAxis: { minValue: 0 },
+    // For the legend to fit, we make the chart area smaller
+    chartArea: { width: '50%', height: '70%' },
+    // lineWidth: 25
+  }}
+  // For tests
+  rootProps={{ 'data-testid': '1' }}
+/>
+    )
+
+
+}
+
+}
 
 //------------------  button  ----------
 
@@ -92,7 +129,7 @@ class SimpleForm extends Component {
           botAvatar="amanab.ico"
           userAvatar="user2.gif"
           headerTitle="Speech Synthesis,"
-          speechSynthesis={{ enable: true, lang: 'en' }}
+          speechSynthesis={{ enable: false, lang: 'en' }}
           headerTitle="AMANA"
           recognitionEnable={true}
 
@@ -122,7 +159,7 @@ class SimpleForm extends Component {
             {
               id: "select-lang-one",
               options: [
-                { value: 'sinhala', label: 'සිංහල' },
+                { value: 'sinhala', label: 'සිංහල',trigger:"summary-graph" },
                 { value: 'tamil', label: 'தமிழ்', trigger: 'tamil-lang' },
                 { value: 'english', label: 'English', trigger: 'intro-eng' },
               ],
@@ -680,8 +717,26 @@ class SimpleForm extends Component {
             {
               id: "summary-end",
               trigger: "summary-end",
-              component: <Summary />,
+              component: <Graphs />,
               asMessage: true,
+              delay: 1300,
+              end: true,
+
+            },
+
+
+            {
+              id: "summary-graph",
+              message: "Graph👇",
+              trigger: "summary-end-graph",
+              delay: 1300,
+            },
+
+            {
+              id: "summary-end-graph",
+              trigger: "summary-end",
+              component: <Graphs />,
+              asMessage: false,
               delay: 1300,
               end: true,
 
