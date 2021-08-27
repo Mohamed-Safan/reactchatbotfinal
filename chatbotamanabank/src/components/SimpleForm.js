@@ -18,33 +18,56 @@ const theme = {
 
 
 class Graphs extends Component{
+  componentWillMount() {
+    const { steps } = this.props;
+    const { name, age, salaryanswer, rate } = steps;
+
+    this.setState({ name, age, salaryanswer,rate });
+  }
   render(){
+    const { rate, salaryanswer } = this.state;
+
+    
     return (
   
 
   <Chart
-  width={'242px'}
-  height={'208px'}
-  chartType="AreaChart"
+  width={'390px'}
+  height={'300px'}
+  
+  
+  chartType="LineChart"
   loader={<div>Loading Chart</div>}
   data={[
-    ['Year', 'Sales', 'Expenses'],
-    ['2013', 1000, 400],
-    ['2014', 1170, 460],
-    ['2015', 660, 1120],
-    ['2016', 1030, 540],
+    ['Year', 'Salary'],
+
+
+    ['Year 1',  Math.floor(rate.value)*(salaryanswer.value)],
+    ['Year 2',  Math.floor(rate.value)*(salaryanswer.value)],
+    ['Year 3',  Math.floor(rate.value)*(salaryanswer.value)],
+    ['Year 4',  Math.floor(rate.value)*(salaryanswer.value)],
   ]}
   options={{
     title: 'graph name > sample',
     hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
-    vAxis: { minValue: 0 },
+    vAxis: { minValue: 1000 ,
+      curveType: "function",
+      legend: { position: "bottom" },
+      type: 'number',
+      
+     
+      gridlines: { count: 4}
+  },
+  
     // For the legend to fit, we make the chart area smaller
-    chartArea: { width: '50%', height: '70%' },
+    
     // lineWidth: 25
   }}
   // For tests
-  rootProps={{ 'data-testid': '1' }}
+ // rootProps={{ 'data-testid': '1' }}
 />
+
+
     )
 
 
@@ -677,25 +700,45 @@ class SimpleForm extends Component {
 
 
             {
-              id: "salary-user-answer-one",
-              message: "What is your annual salary increment rate? ",
-              delay: 1300,
-              trigger: "salary-user-answer-two"
-            },
-
-
-            {
-              id: 'salary-user-answer-two',
+              id: 'salary-user-answer-one',
               options: [
-                { value: 'less5', label: 'Less than 5%', trigger: "summary" },
-                { value: '5to10', label: '5-10 %', trigger: "summary" },
-                { value: '10to15', label: '10-15 %', trigger: "summary" },
-                { value: '15plus', label: 'more than 15%', trigger: "summary" },
-                { value: 'annual', label: 'what is Annual salary increment rate? 🙄', trigger: "salary-inc" },
+                { value: 'thwtissalaryincrementisyear', label: 'What is salary increment rate?', trigger: "salary-inc" },
+                { value: 'skip', label: 'Skip', trigger: "skip-one" },
+                
               ],
               delay: 1300,
 
+
             },
+
+
+
+            {
+              id: "skip-one",
+              message: "What is your annual salary increment rate? ",
+              delay: 1300,
+              trigger: "rate"
+            },
+
+
+         
+            {
+              id: "rate",
+              validator: (rate) => {
+                if (isNaN(rate)) {
+                  return 'rate should be a number';
+                }
+                if (isNaN(rate) || rate > 50000) {
+                  return "Rate must be a number between 1 to 100";
+
+                }
+                return true;
+              },
+              user: true,
+              delay: 1500,
+              trigger: "summary-ends"
+            },
+
 
             {
               id: "salary-inc",
@@ -704,6 +747,18 @@ class SimpleForm extends Component {
               ),
               delay: 1300,
               trigger: "salary-user-answer-one"
+
+            },
+
+            {
+              id: 'summary-ends',
+              options: [
+                { value: 'summary-one', label: 'Summary', trigger: "summary" },
+                { value: 'graphone', label: 'Graph', trigger: "summary-graph" },
+                
+              ],
+              delay: 1300,
+
 
             },
 
@@ -717,7 +772,7 @@ class SimpleForm extends Component {
             {
               id: "summary-end",
               trigger: "summary-end",
-              component: <Graphs />,
+              component: <Summary />,
               asMessage: true,
               delay: 1300,
               end: true,
@@ -727,7 +782,7 @@ class SimpleForm extends Component {
 
             {
               id: "summary-graph",
-              message: "Graph👇",
+              message: "Below is Amana LifePlanners's prediction of your economy",
               trigger: "summary-end-graph",
               delay: 1300,
             },
