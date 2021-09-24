@@ -2,7 +2,26 @@ import React, { Component } from 'react';
 import ChatBot from 'react-simple-chatbot';
 import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
-import Chart from "react-google-charts";
+// import Chart from "react-google-charts";
+import Popup from "reactjs-popup";
+
+
+
+import Calculators from '../Components/inside/Calculators';
+import { Modal } from 'react-bootstrap';
+
+
+const Starts = () => {
+
+return(
+    <Popup position="top left" trigger={<option>Graph</option> }>
+     <Calculators />
+    </Popup>
+);
+}
+
+
+
 
 const theme = {
   background: '#98FF98',
@@ -16,64 +35,6 @@ const theme = {
   userFontColor: 'black',
 };
 
-
-class Graphs extends Component{
-  componentWillMount() {
-    const { steps } = this.props;
-    const { name, age, salaryanswer, rate } = steps;
-
-    this.setState({ name, age, salaryanswer,rate });
-  }
-  render(){
-    const { rate, salaryanswer } = this.state;
-
-    
-    return (
-  
-
-  <Chart
-  width={'390px'}
-  height={'300px'}
-  
-  
-  chartType="LineChart"
-  loader={<div>Loading Chart</div>}
-  data={[
-    ['Year', 'Salary'],
-
-
-    ['Year 1',  Math.floor(rate.value)*(salaryanswer.value)],
-    ['Year 2',  Math.floor(rate.value)*(salaryanswer.value)],
-    ['Year 3',  Math.floor(rate.value)*(salaryanswer.value)],
-    ['Year 4',  Math.floor(rate.value)*(salaryanswer.value)],
-  ]}
-  options={{
-    title: 'graph name > sample',
-    hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
-    vAxis: { minValue: 1000 ,
-      curveType: "function",
-      legend: { position: "bottom" },
-      type: 'number',
-      
-     
-      gridlines: { count: 4}
-  },
-  
-    // For the legend to fit, we make the chart area smaller
-    
-    // lineWidth: 25
-  }}
-  // For tests
- // rootProps={{ 'data-testid': '1' }}
-/>
-
-
-    )
-
-
-}
-
-}
 
 //------------------  button  ----------
 
@@ -145,6 +106,12 @@ Summary.defaultProps = {
 
 ////////---  Component class
 class SimpleForm extends Component {
+  constructor() {
+    super()
+    this.state = {
+      SimpleForm: []
+    }
+  }
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -182,7 +149,7 @@ class SimpleForm extends Component {
             {
               id: "select-lang-one",
               options: [
-                { value: 'sinhala', label: 'සිංහල',trigger:"summary-graph" },
+                { value: 'sinhala', label: 'සිංහල' },
                 { value: 'tamil', label: 'தமிழ்', trigger: 'tamil-lang' },
                 { value: 'english', label: 'English', trigger: 'intro-eng' },
               ],
@@ -685,6 +652,7 @@ class SimpleForm extends Component {
             {
               id: "salaryanswer",
               user: true,
+            
               delay: 1300,
               validator: (value) => {
                 if (isNaN(value)) {
@@ -704,7 +672,7 @@ class SimpleForm extends Component {
               options: [
                 { value: 'thwtissalaryincrementisyear', label: 'What is salary increment rate?', trigger: "salary-inc" },
                 { value: 'skip', label: 'Skip', trigger: "skip-one" },
-                
+
               ],
               delay: 1300,
 
@@ -721,9 +689,11 @@ class SimpleForm extends Component {
             },
 
 
-         
+
             {
               id: "rate",
+              
+              
               validator: (rate) => {
                 if (isNaN(rate)) {
                   return 'rate should be a number';
@@ -736,7 +706,7 @@ class SimpleForm extends Component {
               },
               user: true,
               delay: 1500,
-              trigger: "summary-ends"
+              trigger: "summary-ends-que"
             },
 
 
@@ -751,37 +721,28 @@ class SimpleForm extends Component {
             },
 
             {
-              id: 'summary-ends',
-              options: [
-                { value: 'summary-one', label: 'Summary', trigger: "summary" },
-                { value: 'graphone', label: 'Graph', trigger: "summary-graph" },
-                
-              ],
+              id: "summary-ends-que",
+              message: "Below is the summary of your details",
+              trigger: "summary-ends",
               delay: 1300,
 
-
             },
+
+
 
             {
-              id: "summary",
-              message: "Summary of your details 👇",
+              id: "summary-ends",
               trigger: "summary-end",
+              component: <Summary />,
+              asMessage: false,
               delay: 1300,
+              
+
             },
+
 
             {
               id: "summary-end",
-              trigger: "summary-end",
-              component: <Summary />,
-              asMessage: true,
-              delay: 1300,
-              end: true,
-
-            },
-
-
-            {
-              id: "summary-graph",
               message: "Below is Amana LifePlanners's prediction of your economy",
               trigger: "summary-end-graph",
               delay: 1300,
@@ -789,13 +750,73 @@ class SimpleForm extends Component {
 
             {
               id: "summary-end-graph",
-              trigger: "summary-end",
-              component: <Graphs />,
+              trigger: "summary-ends-last",
+              // component: <Modal.Dialog><Calculators salaryanswer={this.state.salaryanswer} rate={this.state.rate}/> </Modal.Dialog>,
+              component:<Starts/>,
+              
               asMessage: false,
               delay: 1300,
-              end: true,
-
+             
             },
+
+      
+
+            {
+              id: "summary-ends-last",
+              message: "Would you like to update some field?",
+              trigger: "update-question",
+              delay: 5000,
+            },
+
+
+            {
+              id: 'update-question',
+              options: [
+                { value: 'yes', label: 'Yes', trigger: 'update-yes' },
+                { value: 'no', label: 'No', trigger: 'end-message' },
+              ],
+              delay:1300,
+            },
+
+            {
+              id: 'update-yes',
+              message: 'What field would you like to update?',
+              trigger: 'update-fields',
+              delay:1300,
+            },
+            {
+              id: 'update-fields',
+              options: [
+                { value: 'income', label: 'Monthly income',trigger:"update-income" },
+                { value: 'Expenses', label: 'Expenses' },
+              ],
+              delay: 1300,
+            },
+            
+            {
+              id: 'update-income',
+              update: 'salaryanswer',
+              trigger: 'summary-ends-que',
+              delay:1300,
+            },
+
+
+            // // {
+            // //   id: "update-expenses",
+            // //   update: 'gender',
+            // //   trigger: '7',
+            // // },
+
+            {
+              id: 'end-message',
+              
+              message: 'Thanks! ',
+             
+              end: true,
+            },
+
+
+
 
 
 
@@ -830,7 +851,7 @@ class SimpleForm extends Component {
             {
               id: 'option-first-tamil',
               options: [
-                { value: 'yestamil', label: 'ஆம், ஆரம்பிப்போம்', trigger:"yes-resp-tamil" },
+                { value: 'yestamil', label: 'ஆம், ஆரம்பிப்போம்', trigger: "yes-resp-tamil" },
                 { value: 'notamil ', label: 'இல்லை, வேண்டாம் ', trigger: "no-resp-tamil" },
               ],
               delay: 1300,
@@ -902,7 +923,7 @@ class SimpleForm extends Component {
               trigger: "question-five-tamil",
             },
 
-             // option two
+            // option two
 
             // 1st Option
             {
@@ -946,8 +967,8 @@ class SimpleForm extends Component {
             {
               id: "answer-two-tamil",
               options: [
-                { value: 'yt', label: 'ஆம் , 😋', trigger:"qestion-yes-tamil"},
-                { value: 'nt', label: 'வேண்டாம்  🙂'},
+                { value: 'yt', label: 'ஆம் , 😋', trigger: "qestion-yes-tamil" },
+                { value: 'nt', label: 'வேண்டாம்  🙂' },
               ],
 
               delay: 1300,
@@ -957,7 +978,7 @@ class SimpleForm extends Component {
             {
               id: "qestion-yes-tamil",
               options: [
-                { value: 'jokest' , label: 'காமடிகள் 😋',trigger: "jokes-ans-tamil" },
+                { value: 'jokest', label: 'காமடிகள் 😋', trigger: "jokes-ans-tamil" },
                 { value: 'not', label: 'வேண்டாம் ' },
               ],
               delay: 1300,
@@ -971,7 +992,7 @@ class SimpleForm extends Component {
                 <div>DOCTOR:- Do exercise daily for good health🙄</div>
               ),
               delay: 1300,
-             trigger: 'jokes-ans-two-tamil',
+              trigger: 'jokes-ans-two-tamil',
             },
 
 
